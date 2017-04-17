@@ -18,11 +18,12 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author VMARALA
  */
-public class MonitorUI extends javax.swing.JFrame {
+public class MonitorUI extends javax.swing.JFrame{
 
     boolean isConnected;
 
     Weatherable serverInterface;
+    MonitorProxy mp;
     String serverHost, serverKey;
 
     /**
@@ -30,6 +31,7 @@ public class MonitorUI extends javax.swing.JFrame {
      */
     public MonitorUI() {
         initComponents();
+        
     }
 
     /**
@@ -300,6 +302,7 @@ public class MonitorUI extends javax.swing.JFrame {
 
         try {
             serverInterface = (Weatherable) Naming.lookup("rmi://" + serverHost + ":1099/weatherservice");
+
             if (serverInterface.validateLogin(serverKey)) {
                 showAlert("You are successfully connected to the weather server !");
                 isConnected = true;
@@ -308,6 +311,10 @@ public class MonitorUI extends javax.swing.JFrame {
                 btnConnect.setEnabled(false);
                 loadCounts();
                 cmbLocations.setModel(new DefaultComboBoxModel(serverInterface.getLocations().toArray()));
+                mp = new MonitorProxy();
+                mp.registerInterface(this);
+                serverInterface.addClient(mp);
+                //cmbLocations.setSelectedIndex(0);
             } else {
                 showAlert("You have entered an invalid server key !");
             }
@@ -432,4 +439,11 @@ public class MonitorUI extends javax.swing.JFrame {
     private javax.swing.JTextField txtServerHost;
     private javax.swing.JPasswordField txtServerPass;
     // End of variables declaration//GEN-END:variables
+
+    
+    public void monitorWarning() throws RemoteException {
+        showAlert("Notifieds");
+    }
+
+   
 }
