@@ -6,9 +6,22 @@
 
 /**
  *
- * @author VMARALA
+ * @author Lanil Marasinghe
  */
 import java.rmi.*;
-public interface Weatherable extends Remote{
+import java.util.List;
+
+public interface Weatherable extends Remote {
+
     public float getCurrentReading(String location, String sensor) throws RemoteException;
+
+    public int getActiveLocationsCount() throws RemoteException;
+
+    public int getActiveSensorCount() throws RemoteException;
+    
+    public boolean validateLogin(String key) throws RemoteException;
+    
+    public List getLocations() throws RemoteException;
+    
+    public String getTimeStamp(String location, String sensor) throws RemoteException;
 }
