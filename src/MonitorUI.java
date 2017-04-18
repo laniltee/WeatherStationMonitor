@@ -18,7 +18,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author VMARALA
  */
-public class MonitorUI extends javax.swing.JFrame{
+public class MonitorUI extends javax.swing.JFrame {
 
     boolean isConnected;
 
@@ -31,7 +31,7 @@ public class MonitorUI extends javax.swing.JFrame{
      */
     public MonitorUI() {
         initComponents();
-        
+
     }
 
     /**
@@ -53,6 +53,7 @@ public class MonitorUI extends javax.swing.JFrame{
         txtLocationCount = new javax.swing.JLabel();
         txtSensorCount = new javax.swing.JLabel();
         btnUpdateCount = new javax.swing.JButton();
+        lblMonitorCount = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         cmbLocations = new javax.swing.JComboBox<>();
@@ -63,9 +64,14 @@ public class MonitorUI extends javax.swing.JFrame{
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
         btnClearWarnings = new javax.swing.JButton();
+        jPanel5 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        btnIgnore = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Weather Monitoring Station");
+        setResizable(false);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Connect to Weather Server"));
 
@@ -135,6 +141,10 @@ public class MonitorUI extends javax.swing.JFrame{
             }
         });
 
+        lblMonitorCount.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        lblMonitorCount.setForeground(new java.awt.Color(51, 153, 0));
+        lblMonitorCount.setText("No. of Active Monitors   : 0");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -146,7 +156,8 @@ public class MonitorUI extends javax.swing.JFrame{
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtLocationCount, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtSensorCount, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtSensorCount, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblMonitorCount, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 10, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -155,9 +166,11 @@ public class MonitorUI extends javax.swing.JFrame{
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(txtLocationCount)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtSensorCount)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtSensorCount)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblMonitorCount)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnUpdateCount)
                 .addContainerGap())
         );
@@ -228,6 +241,11 @@ public class MonitorUI extends javax.swing.JFrame{
         jScrollPane2.setViewportView(jTable2);
 
         btnClearWarnings.setText("Clear Warnings !");
+        btnClearWarnings.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearWarningsActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -235,12 +253,10 @@ public class MonitorUI extends javax.swing.JFrame{
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnClearWarnings, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnClearWarnings, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -252,6 +268,54 @@ public class MonitorUI extends javax.swing.JFrame{
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder("Critical Messages"));
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Location", "Sensor", "Message"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTable3);
+
+        btnIgnore.setText("Ignore All");
+        btnIgnore.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIgnoreActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnIgnore, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnIgnore)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -261,14 +325,15 @@ public class MonitorUI extends javax.swing.JFrame{
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 351, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(22, 22, 22))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,7 +345,9 @@ public class MonitorUI extends javax.swing.JFrame{
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -309,11 +376,11 @@ public class MonitorUI extends javax.swing.JFrame{
                 txtServerHost.setEnabled(false);
                 txtServerPass.setEnabled(false);
                 btnConnect.setEnabled(false);
-                loadCounts();
                 cmbLocations.setModel(new DefaultComboBoxModel(serverInterface.getLocations().toArray()));
                 mp = new MonitorProxy();
                 mp.registerInterface(this);
                 serverInterface.addClient(mp);
+                loadCounts();
                 //cmbLocations.setSelectedIndex(0);
             } else {
                 showAlert("You have entered an invalid server key !");
@@ -360,6 +427,16 @@ public class MonitorUI extends javax.swing.JFrame{
             showAlert(ex.getMessage());
         }
     }//GEN-LAST:event_btnGetReadingsActionPerformed
+
+    private void btnClearWarningsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearWarningsActionPerformed
+        clearAlerts();
+    }//GEN-LAST:event_btnClearWarningsActionPerformed
+
+    private void btnIgnoreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIgnoreActionPerformed
+        DefaultTableModel readingsTable = (DefaultTableModel) jTable3.getModel();
+        readingsTable.getDataVector().removeAllElements();
+        readingsTable.fireTableDataChanged();
+    }//GEN-LAST:event_btnIgnoreActionPerformed
 
     /**
      * @param args the command line arguments
@@ -410,6 +487,7 @@ public class MonitorUI extends javax.swing.JFrame{
             try {
                 txtLocationCount.setText("No. of Active Locations: " + serverInterface.getActiveLocationsCount());
                 txtSensorCount.setText("No. of Active Sensors: " + serverInterface.getActiveSensorCount());
+                lblMonitorCount.setText("No. of Active Monitors: " + serverInterface.getMonitorsCount());
             } catch (RemoteException ex) {
                 showAlert(ex.getMessage());
             }
@@ -417,10 +495,39 @@ public class MonitorUI extends javax.swing.JFrame{
         }
     }
 
+    public void addAlert(String location, String sensor, String timestamp, float reading) {
+        if (Float.compare(reading, 404.0F) == 0) {
+            DefaultTableModel warningTable = (DefaultTableModel) jTable3.getModel();
+            Object[] messageArray = {sensor, timestamp, "STOPPED RUNNING"};
+            warningTable.addRow(messageArray);
+        }
+        if (Float.compare(reading, 201.0F) == 0) {
+            DefaultTableModel warningTable = (DefaultTableModel) jTable3.getModel();
+            Object[] messageArray = {sensor, timestamp, "STARTED RUNNING"};
+            warningTable.addRow(messageArray);
+        }
+        if (Float.compare(reading, 201.0F) != 0 && Float.compare(reading, 404.0F) != 0) {
+            showAlert("Weather Alert !!!");
+            DefaultTableModel alertTable = (DefaultTableModel) jTable2.getModel();
+            timestamp = timestamp.replace("Z", " ");
+            timestamp = timestamp.replace("T", " ");
+            Object[] valueArray = {location, sensor, timestamp, reading};
+            alertTable.addRow(valueArray);
+        }
+        loadCounts();
+    }
+
+    void clearAlerts() {
+        DefaultTableModel readingsTable = (DefaultTableModel) jTable2.getModel();
+        readingsTable.getDataVector().removeAllElements();
+        readingsTable.fireTableDataChanged();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClearWarnings;
     private javax.swing.JButton btnConnect;
     private javax.swing.JButton btnGetReadings;
+    private javax.swing.JButton btnIgnore;
     private javax.swing.JButton btnUpdateCount;
     private javax.swing.JComboBox<String> cmbLocations;
     private javax.swing.JLabel jLabel1;
@@ -430,20 +537,22 @@ public class MonitorUI extends javax.swing.JFrame{
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JLabel lblMonitorCount;
     private javax.swing.JLabel txtLocationCount;
     private javax.swing.JLabel txtSensorCount;
     private javax.swing.JTextField txtServerHost;
     private javax.swing.JPasswordField txtServerPass;
     // End of variables declaration//GEN-END:variables
 
-    
     public void monitorWarning() throws RemoteException {
         showAlert("Notifieds");
     }
 
-   
 }

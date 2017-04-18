@@ -20,8 +20,9 @@ public class MonitorProxy extends UnicastRemoteObject implements Monitorable {
     }
     
     @Override
-    public void monitorWarning() throws RemoteException {
-        parentInterface.showAlert("asdasda");
+    public void monitorWarning(String location, String sensor, String timestamp, float reading) throws RemoteException {
+        //parentInterface.showAlert("Weather Alert ! ! !");
+        parentInterface.addAlert(location, sensor, timestamp, reading);
     }
     
     public void registerInterface(MonitorUI m){
